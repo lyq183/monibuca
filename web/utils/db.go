@@ -1,9 +1,10 @@
 package utils
 
 //	连接数据库
-
 import (
 	"database/sql"
+	"fmt"
+	"github.com/lyq183/monibuca/v3/web/config"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -20,9 +21,16 @@ func init() {
 	//		大多数用户会通过数据库特定的连接帮助函数打开数据库，返回一个*DB。	Go标准库中没有数据库驱动。
 	//		格式：sql.Open("mysql", "用户名:密码@tcp(ip:端口)/数据库?charset=utf8")
 
-	db, err := sql.Open("mysql", "root:12345@tcp(localhost:3306)/library")
+	root := config.DatabaseRoot
+	password := config.DatabasePassword
+	database := config.Database
+	dataSourcename := root + password + "@tcp(localhost:3306)/" + database
+
+	//dataSourcename := "root:12345@tcp(localhost:3306)/library"
+	db, err := sql.Open("mysql", dataSourcename)
 	Db = db
 	if err != nil {
+		fmt.Println("错误！！！sql.Open err:", err)
 		log.Fatal("错误！！！sql.Open err:", err)
 	}
 }
