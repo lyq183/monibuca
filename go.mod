@@ -1,4 +1,4 @@
-module github.com/langhuihui/monibuca/v3
+module github.com/lyq183/monibuca/v3
 
 go 1.16
 
@@ -17,6 +17,7 @@ require (
 	github.com/Monibuca/plugin-ts/v3 v3.0.1
 	github.com/Monibuca/plugin-webrtc/v3 v3.0.3
 	github.com/Monibuca/utils/v3 v3.0.6 // indirect
+	github.com/go-sql-driver/mysql v1.6.0
 )
 
 // replace github.com/Monibuca/plugin-ffmpeg => ../plugin-ffmpeg

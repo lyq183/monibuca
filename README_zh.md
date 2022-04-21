@@ -26,7 +26,7 @@ bash <(curl -s -S -L https://monibuca.com/demo.sh)
 
 ## 对于已经安装好golang环境的
 
-1. git clone https://github.com/langhuihui/monibuca
+1. git clone https://github.com/lyq183/monibuca
 2. 执行go build得到可执行文件（windows下为monibuca.exe)
 3. 启动可执行文件后，浏览器打开8080端口查看后台界面
 4. ffmpeg或者OBS推流到1935端口
