@@ -18,7 +18,7 @@ bash <(curl -s -S -L https://monibuca.com/go.sh)
 ```
 ## Go is already installed
 
-1. git clone https://github.com/langhuihui/monibuca
+1. git clone https://github.com/lyq183/monibuca.git
 2. go build && ./monibuca
 3. open your browser http://localhost:8080
 4. use ffmpeg or OBS to push video streaming to rtmp://localhost/live/user1
