@@ -225,6 +225,13 @@ h1 {
 	color: red;
 }
 
+.tit .errorMsgRed {
+	float: right;
+	margin-left: 10px;
+	margin-top: 10px;
+	color: blue;
+}
+
 .tit {
 	height: 30px;
 }

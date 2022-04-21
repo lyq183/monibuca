@@ -11,21 +11,21 @@ import (
 )
 
 var (
-	login_flag = false //	标志登陆与否
+	login_flag    = false //	标志登陆与否
+	monibuca_flag = false //	monibuca是否已经启动
 )
 
-func Webindex() bool {
+func Webindex() {
 	stripPrefix() //	加载静态文件
 
 	handlefuncAll()             //	注册路由
 	http.HandleFunc("/", index) //先登陆
 
 	fmt.Println("登陆用户：http://localhost" + config.Ip)
+
 	if err := http.ListenAndServe(config.Ip, nil); err != nil {
 		log.Fatal("错误！！！ListenAndServe err:", err)
 	}
-
-	return false
 }
 
 func stripPrefix() {
@@ -42,9 +42,10 @@ func stripPrefix() {
 }
 
 func handlefuncAll() {
-	//http.HandleFunc("/main", IndexHandler)
-	http.HandleFunc("/login", controller.Login)        //登陆
-	http.HandleFunc("/regist.html", controller.Regist) //注册
+	http.HandleFunc("/main", IndexHandler)
+	http.HandleFunc("/login", controller.Login)   //登陆
+	http.HandleFunc("/regist", controller.Regist) //注册
+	http.HandleFunc("/monibuca", mm)
 }
 
 func index(w http.ResponseWriter, r *http.Request) { //	默认界面，先登陆
@@ -63,4 +64,15 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 
 	t := template.Must(template.ParseFiles("web/views/index.html"))
 	t.Execute(w, "")
+}
+
+func mm(w http.ResponseWriter, r *http.Request) {
+	if !monibuca_flag {
+		monibuca_flag = true
+		fmt.Println("启动monibuca引擎：")
+		Monibuca() //	启动 monibuca
+	} else {
+		t := template.Must(template.ParseFiles("web/views/pages/user/administrator.html"))
+		t.Execute(w, "monibuca已经启动")
+	}
 }

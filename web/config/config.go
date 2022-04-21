@@ -4,7 +4,7 @@ package config
 var (
 	//Config = config{"9011","root","12345","library"}
 
-	Ip = ":9011" //登陆监听地址
+	Ip = ":8081" //登陆监听地址
 
 	//	连接数据库
 	DatabaseRoot     = "root"

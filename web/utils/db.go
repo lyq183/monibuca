@@ -4,10 +4,10 @@ package utils
 import (
 	"database/sql"
 	"fmt"
-	"github.com/lyq183/monibuca/v3/web/config"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/lyq183/monibuca/v3/web/config"
 )
 
 var (
@@ -24,13 +24,14 @@ func init() {
 	root := config.DatabaseRoot
 	password := config.DatabasePassword
 	database := config.Database
-	dataSourcename := root + password + "@tcp(localhost:3306)/" + database
+	dataSourcename := root + ":" + password + "@tcp(localhost:3306)/" + database
 
 	//dataSourcename := "root:12345@tcp(localhost:3306)/library"
 	db, err := sql.Open("mysql", dataSourcename)
-	Db = db
 	if err != nil {
 		fmt.Println("错误！！！sql.Open err:", err)
 		log.Fatal("错误！！！sql.Open err:", err)
+	} else {
+		Db = db
 	}
 }

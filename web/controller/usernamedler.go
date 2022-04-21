@@ -10,6 +10,9 @@ import (
 
 //Login 处理用户登录
 func Login(w http.ResponseWriter, r *http.Request) {
+	//r.ParseForm()
+	//fmt.Println(r.PostForm)
+
 	//获取用户名和密码
 	username := r.PostFormValue("username")
 	password := r.PostFormValue("password")
@@ -20,7 +23,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println()
 	if user.Uid > 0 {
 		//用户名和密码正确
-		t := template.Must(template.ParseFiles("web/views/pages/user/login_success.html"))
+		t := template.Must(template.ParseFiles("web/views/pages/user/administrator.html"))
+		fmt.Println("管理用户登陆！")
 		t.Execute(w, "")
 	} else {
 		//用户名或密码不正确
