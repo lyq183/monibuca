@@ -35,6 +35,7 @@ func (f *Filter) Handle(webHandle WebHandle) WebHandle {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("检测到请求：" + r.RequestURI)
 		if !Flag {
+			fmt.Println("执行拦截:" + r.RequestURI)
 			// 执行拦截业务逻辑
 			webHandle(w, r)
 		} else {

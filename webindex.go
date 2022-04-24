@@ -31,15 +31,19 @@ func handlefuncAll() {
 	// 1.过滤器
 	filter := common.NewFilter()
 	// 注册拦截器
-	filter.RegisterFilterUri("/monibuca", monibuca_start)
-	filter.RegisterFilterUri("/logout", controller.Logout)
-	filter.RegisterFilterUri("/regist", controller.Regist)
+	filter.RegisterFilterUri("/monibuca", monibuca_start)          //	启动monibuca
+	filter.RegisterFilterUri("/logout", controller.Logout)         //	登出
+	filter.RegisterFilterUri("/regist", controller.Regist)         //	注册
+	filter.RegisterFilterUri("/ffmpeg", controller.Ffmpeg)         //	ffmpeg
+	filter.RegisterFilterUri("/ffmpegPuth", controller.FfmpegPuth) //	ffmpeg推流
 	// 2.启动服务
 	http.HandleFunc("/regist", filter.Handle(controller.Check))
 	http.HandleFunc("/monibuca", filter.Handle(controller.Check))
 	http.HandleFunc("/logout", filter.Handle(controller.Check))
+	http.HandleFunc("/ffmpeg", filter.Handle(controller.Check))
+	http.HandleFunc("/ffmpegPuth", filter.Handle(controller.Check))
 
-	http.HandleFunc("/main", IndexHandler)
+	//http.HandleFunc("/main", IndexHandler)
 	http.HandleFunc("/login", controller.Login) //登陆
 }
 
