@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/lyq183/monibuca/v3/web/common"
 	"html/template"
 	"log"
 	"net/http"
@@ -11,46 +12,35 @@ import (
 )
 
 var (
-	login_flag    = false //	标志登陆与否
 	monibuca_flag = false //	monibuca是否已经启动
 )
 
 func Webindex() {
 	stripPrefix() //	加载静态文件
 
-	handlefuncAll()             //	注册路由
-	http.HandleFunc("/", index) //先登陆
+	handlefuncAll()                        //	注册路由
+	http.HandleFunc("/", controller.Index) //先登陆
 
 	fmt.Println("登陆用户：http://localhost" + config.Ip)
-
 	if err := http.ListenAndServe(config.Ip, nil); err != nil {
 		log.Fatal("错误！！！ListenAndServe err:", err)
 	}
 }
 
-func stripPrefix() {
-	//	http.FileServer(prefix string,h Handler) Handler：
-	//		返回一个处理器，该处理器会将请求的URL.Path字 段中给定 前缀prefix 去除掉后再交由 h处理。
-	//		stringPrefix会向URL.Path字段中没有给定前缀的请求回复404 page not found
-
-	//	func FileServer(root FileSystem) Handler
-	//		FileServer返回一个使用FileSystem接口root提供文件访问服务的HTTP处理器。
-	//		要使用操作系统的FileSystem接口实现，可使用http.Dir：http.Handle("/", http.FileServer(http.Dir("/tmp")))
-
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web/views/static"))))
-	http.Handle("/pages/", http.StripPrefix("/pages/", http.FileServer(http.Dir("web/views/pages"))))
-}
-
 func handlefuncAll() {
-	http.HandleFunc("/main", IndexHandler)
-	http.HandleFunc("/login", controller.Login)   //登陆
-	http.HandleFunc("/regist", controller.Regist) //注册
-	http.HandleFunc("/monibuca", mm)
-}
+	// 1.过滤器
+	filter := common.NewFilter()
+	// 注册拦截器
+	filter.RegisterFilterUri("/monibuca", monibuca_start)
+	filter.RegisterFilterUri("/logout", controller.Logout)
+	filter.RegisterFilterUri("/regist", controller.Regist)
+	// 2.启动服务
+	http.HandleFunc("/regist", filter.Handle(controller.Check))
+	http.HandleFunc("/monibuca", filter.Handle(controller.Check))
+	http.HandleFunc("/logout", filter.Handle(controller.Check))
 
-func index(w http.ResponseWriter, r *http.Request) { //	默认界面，先登陆
-	t := template.Must(template.ParseFiles("web/views/pages/user/login.html"))
-	t.Execute(w, "")
+	http.HandleFunc("/main", IndexHandler)
+	http.HandleFunc("/login", controller.Login) //登陆
 }
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +56,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, "")
 }
 
-func mm(w http.ResponseWriter, r *http.Request) {
+func monibuca_start(w http.ResponseWriter, r *http.Request) {
 	if !monibuca_flag {
 		monibuca_flag = true
 		fmt.Println("启动monibuca引擎：")
@@ -75,4 +65,17 @@ func mm(w http.ResponseWriter, r *http.Request) {
 		t := template.Must(template.ParseFiles("web/views/pages/user/administrator.html"))
 		t.Execute(w, "monibuca已经启动")
 	}
+}
+
+func stripPrefix() {
+	//	http.FileServer(prefix string,h Handler) Handler：
+	//		返回一个处理器，该处理器会将请求的URL.Path字 段中给定 前缀prefix 去除掉后再交由 h处理。
+	//		stringPrefix会向URL.Path字段中没有给定前缀的请求回复404 page not found
+
+	//	func FileServer(root FileSystem) Handler
+	//		FileServer返回一个使用FileSystem接口root提供文件访问服务的HTTP处理器。
+	//		要使用操作系统的FileSystem接口实现，可使用http.Dir：http.Handle("/", http.FileServer(http.Dir("/tmp")))
+
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web/views/static"))))
+	http.Handle("/pages/", http.StripPrefix("/pages/", http.FileServer(http.Dir("web/views/pages"))))
 }

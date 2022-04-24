@@ -48,11 +48,12 @@
 					return false;
 				}
 				//获取用户输入的邮箱
-				var email = $("#email").val();
+				var power = $("#power").val();
 				//设置验证邮箱的正则表达式
-				var emailReg = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-				if(!emailReg.test(email)){
-					alert("邮箱格式不正确！");
+				// var emailReg = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+				// var powerReg = /^([0-1]])/;
+				if(!powerReg.test(power)){
+					alert("权限不正确！");
 					return false;
 				}
 
@@ -80,7 +81,7 @@
 				</div>
 				<br>
 				<div class="form">
-					<form action="/regist",method="POST">
+					<form action="/regist" method="POST">
 						<label>用户名称：</label>
 						<input class="itxt" type="text" placeholder="请输入用户名" autocomplete="off" tabindex="1" name="username" id="username" />
 						<br />
@@ -93,8 +94,13 @@
 						<input class="itxt" type="password" placeholder="确认密码" autocomplete="off" tabindex="1" name="repwd" id="repwd" />
 						<br />
 						<br />
-						<label>电子邮件：</label>
-						<input class="itxt" type="text" placeholder="请输入邮箱地址" autocomplete="off" tabindex="1" name="email" id="email" />
+						<label>用户权限：</label>
+<!--						<input class="itxt" type="text" placeholder="请输入用户权限" autocomplete="off" tabindex="1" name="power"-->
+<!--							   id="power"/>-->
+<!--						<br />-->
+<!--						<br />-->
+						<input type="radio" name="power" value="A" /> 管理
+						<input type="radio" name="power" value="N" /> 普通<br />
 						<br />
 						<br />
 						<br />
