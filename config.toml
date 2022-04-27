@@ -85,7 +85,8 @@ Expires = 3600
 # TCP = true
 # TCP端口数量，超过一个的话将会每个设备轮流使用，从MediaPort往下递增
 # TCPMediaPortNum = 1
-ListenAddr = "192.168.1.120:5060"
+# ListenAddr = "192.168.1.120:5060"
+ListenAddr = "192.168.43.136:5065"
 # 自动停止发布，当订阅者数量将为0时，延迟N秒自动断开,-1代表不断开
 AutoCloseAfter = -1
 # 自动拉流，如果开启，则拿到设备注册信息后，就从设备拉流

@@ -1,6 +1,5 @@
 package controller
 
-//	ffmpeg推流到指定 ip
 import (
 	"bytes"
 	"fmt"
@@ -8,6 +7,10 @@ import (
 	"os/exec"
 	"syscall"
 	"text/template"
+)
+
+var (
+	Monibuca_flag = false //	monibuca是否已经启动
 )
 
 func Ffmpeg(w http.ResponseWriter, r *http.Request) {
@@ -56,6 +59,7 @@ func Ffmpeg(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, "")
 }
 
+//	ffmpeg推流到指定 ip
 func FfmpegPuth(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	fmt.Println(r.PostForm)
@@ -97,4 +101,9 @@ func FfmpegPuth(w http.ResponseWriter, r *http.Request) {
 		//输出结果
 		fmt.Println(outInfo.String())
 	}
+}
+
+func Monibuce_wu(w http.ResponseWriter, r *http.Request) {
+	t := template.Must(template.ParseFiles("web/views/pages/error/404.html"))
+	t.Execute(w, "monibuca尚未启动！")
 }

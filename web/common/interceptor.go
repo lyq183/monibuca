@@ -3,11 +3,14 @@ package common
 //	拦截器
 import (
 	"fmt"
+	"github.com/lyq183/monibuca/v3/web/controller"
+	"github.com/lyq183/monibuca/v3/web/dao"
 	"net/http"
 	"strings"
+
+	"github.com/lyq183/monibuca/v3/web/model"
 )
 
-var Flag = false                                            //	标志拦截与否，即登陆与否
 type WebHandle func(w http.ResponseWriter, r *http.Request) // 声明新的函数类型
 
 // 拦截器结构体
@@ -34,11 +37,15 @@ func (f *Filter) GetFilterHandle(uri string) WebHandle {
 func (f *Filter) Handle(webHandle WebHandle) WebHandle {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("检测到请求：" + r.RequestURI)
-		if !Flag {
-			fmt.Println("执行拦截:" + r.RequestURI)
+		Flag, sess := IsLogin(r)
+
+		if !Flag { //	没有用户登陆！
+			fmt.Println("!!执行拦截:" + r.RequestURI)
 			// 执行拦截业务逻辑
 			webHandle(w, r)
-		} else {
+		} else if sess.Permissions == 0 {
+			controller.Not404(w, r)
+		} else { //	有管理员权限，允许访问
 			url := strings.Split(r.RequestURI, "?")
 			for path, handle := range f.filterMap {
 				if path == url[0] {
@@ -48,5 +55,21 @@ func (f *Filter) Handle(webHandle WebHandle) WebHandle {
 			}
 		}
 	}
+}
 
+//	检查数据库，判断用户是否登陆
+func IsLogin(r *http.Request) (bool, *model.Session) {
+	cookie, _ := r.Cookie("user") //根据Cookie的name获取Cookie
+	fmt.Println("!!!!", cookie)
+	if cookie != nil { //	存在用户已经登陆
+		cookieValue := cookie.Value //获取Cookie的value
+		fmt.Println(cookieValue)
+		//根据cookieValue 去数据库中查询与之对应的 Session
+		if sess, _ := dao.GetSession(cookieValue); sess != nil {
+			fmt.Println("用户已经登陆。")
+			return true, sess
+		}
+	}
+
+	return false, nil
 }

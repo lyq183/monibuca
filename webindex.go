@@ -11,13 +11,8 @@ import (
 	"github.com/lyq183/monibuca/v3/web/controller"
 )
 
-var (
-	monibuca_flag = false //	monibuca是否已经启动
-)
-
 func Webindex() {
-	stripPrefix() //	加载静态文件
-
+	stripPrefix()                          //	加载静态文件
 	handlefuncAll()                        //	注册路由
 	http.HandleFunc("/", controller.Index) //先登陆
 
@@ -29,45 +24,31 @@ func Webindex() {
 
 func handlefuncAll() {
 	// 1.过滤器
-	filter := common.NewFilter()
+	filter_all := common.NewFilter()
 	// 注册拦截器
-	filter.RegisterFilterUri("/monibuca", monibuca_start)          //	启动monibuca
-	filter.RegisterFilterUri("/logout", controller.Logout)         //	登出
-	filter.RegisterFilterUri("/regist", controller.Regist)         //	注册
-	filter.RegisterFilterUri("/ffmpeg", controller.Ffmpeg)         //	ffmpeg
-	filter.RegisterFilterUri("/ffmpegPuth", controller.FfmpegPuth) //	ffmpeg推流
+	filter_all.RegisterFilterUri("/monibuca", Monibuca_start)          //	启动monibuca
+	filter_all.RegisterFilterUri("/regist", controller.Regist)         //	注册
+	filter_all.RegisterFilterUri("/ffmpeg", controller.Ffmpeg)         //	ffmpeg
+	filter_all.RegisterFilterUri("/ffmpegPuth", controller.FfmpegPuth) //	ffmpeg推流
 	// 2.启动服务
-	http.HandleFunc("/regist", filter.Handle(controller.Check))
-	http.HandleFunc("/monibuca", filter.Handle(controller.Check))
-	http.HandleFunc("/logout", filter.Handle(controller.Check))
-	http.HandleFunc("/ffmpeg", filter.Handle(controller.Check))
-	http.HandleFunc("/ffmpegPuth", filter.Handle(controller.Check))
+	http.HandleFunc("/regist", filter_all.Handle(controller.Check))
+	http.HandleFunc("/monibuca", filter_all.Handle(controller.Check))
+	http.HandleFunc("/ffmpeg", filter_all.Handle(controller.Check))
+	http.HandleFunc("/ffmpegPuth", filter_all.Handle(controller.Check))
 
-	//http.HandleFunc("/main", IndexHandler)
-	http.HandleFunc("/login", controller.Login) //登陆
+	http.HandleFunc("/login", controller.Login)   //	登陆
+	http.HandleFunc("/logout", controller.Logout) //	登出
+	http.HandleFunc("/monibuca_wu", controller.Monibuce_wu)
 }
 
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	//	func (t *Template) ParseFiles(filenames ...string) (*Template, error)：
-	//		解析filenames 指定的文件里面的模板定义并解析结果与t关联。
-	//	func (t *Template) Must(t *template, err error) *Tmplate：
-	//		包装返回(*Template,error)的函数/方法调用，会在err非nil使panic，一般用于变量初始化。
-	//	func (t *Template) Execute(wr io.Writer, data interface{}) error
-	//		Execute方法将解析好的模板应用到data上，并输出写入wr。
-	//		如果执行时出现错误，会停止执行，但有可能已经写入wr部分数据。模板可以安全的并发执行。
-
-	t := template.Must(template.ParseFiles("web/views/index.html"))
-	t.Execute(w, "")
-}
-
-func monibuca_start(w http.ResponseWriter, r *http.Request) {
-	if !monibuca_flag {
-		monibuca_flag = true
-		fmt.Println("启动monibuca引擎：")
+func Monibuca_start(w http.ResponseWriter, r *http.Request) {
+	if !controller.Monibuca_flag {
+		controller.Monibuca_flag = true
+		fmt.Println("管理员启动monibuca引擎：")
 		Monibuca() //	启动 monibuca
 	} else {
 		t := template.Must(template.ParseFiles("web/views/pages/user/administrator.html"))
-		t.Execute(w, "monibuca已经启动")
+		t.Execute(w, "/ui/")
 	}
 }
 

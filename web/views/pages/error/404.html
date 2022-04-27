@@ -1,53 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
-    <script type="text/javascript">
-        var i = 5;
-        window.onload = function page_cg() {
-            document.getElementById("time").innerText = i;
-            i--;
-            if (i == 0) {
-                window.location.href("login.aspx");
-            }
-            setTimeout(page_cg, 1000);
-        }
-    </script>
+    <title>404 not found</title>
 </head>
-<body>
-<div class="admin-content">
-    <div class="am-cf am-padding">
-        <div class="am-fl am-cf">
-            <strong class="am-text-primary am-text-lg">404</strong> / <small>That’s an error</small>
-        </div>
-    </div>
 
-    <div class="am-g">
-        <div class="am-u-sm-12">
-            <h2 class="am-text-center am-text-xxxl am-margin-top-lg">404. Not Found</h2>
-            <p class="am-text-center">
-                没有找到你要的页面
-            </p>
-            <p class="am-text-center">
-                <span id="num">5</span>秒后自动跳转到首页<a href="login.html">马上跳转</a>
-            </p>
-            <pre class="page-404">
-                   .----.
-                _.'__    `.
-            .--($)($$)---/#\
-          .' @          /###\
-          :         ,   #####
-          `-..__.-' _.-\###/
-                `;_:    `"'
-              .'"""""`.
-              /,  ya ,\\
-             //  404!  \\
-             `-._______.-'
-             ___`. | .'___
-            (______|______)
-            </pre>
-            </div>
-        </div>
-    </div>
+    <body>
+    <div>   404 not found !!!</div>
+    <div>--------------------</div>
+    <div> {{ . }} </div>
     </body>
 </html>
