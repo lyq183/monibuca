@@ -129,7 +129,7 @@ div{
 
 .login_form{
 	height:310px;
-	width:406px;
+	width:400px;
 	float: right;
 	margin-right:50px;
 	margin-top: 50px;
@@ -144,7 +144,7 @@ div{
 .login_box{
 	margin: 20px;
 	height: 260px;
-	width: 366px;
+	width: 400px;
 }
 
 h1 {
@@ -184,7 +184,13 @@ h1 {
     padding: 10px 0 10px 10px;
     width: 220px;
     border: 1px #e3e3e3 solid;
+
 }
+.form label{
+	/*display: inline-block;*/
+	width:200px;
+}
+
 
 #sub_btn{
 	background-color: #39987c;

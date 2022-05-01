@@ -2,11 +2,11 @@ package controller
 
 import (
 	"fmt"
-	"github.com/lyq183/monibuca/v3/web/model"
 	"net/http"
 	"text/template"
 
 	"github.com/lyq183/monibuca/v3/web/dao"
+	"github.com/lyq183/monibuca/v3/web/model"
 )
 
 //	默认界面，先登陆
@@ -70,20 +70,23 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			Value:    str, //	将其 Value值设置为 Seesion的id
 			HttpOnly: true,
 		}
-		http.SetCookie(w, &cookie) //将cookie发送给浏览器
+		http.SetCookie(w, &cookie) //将 cookie发送给浏览器
 		//w.Header().Set("user", cookie.String())
 
-		str = "localhost:8081/ui/" //	检查 monibuca是否启动
+		ui := "/ui/" //	检查 monibuca是否启动
 		if !Monibuca_flag {
-			str = "/monibuca_wu"
+			ui = "/monibuca_wu"
 		}
 
 		if user.Power == 1 { //	管理员登陆
-			t := template.Must(template.ParseFiles("web/views/pages/user/administrator.html"))
-			t.Execute(w, str)
+			t := template.Must(template.ParseFiles("web/views/pages/admin/administrator.html"))
+			t.Execute(w, map[string]string{
+				"ui": ui,
+			})
+
 		} else { //	普通用户登陆
 			t := template.Must(template.ParseFiles("web/views/pages/user/user.html"))
-			t.Execute(w, str)
+			t.Execute(w, ui)
 		}
 	} else {
 		//用户名或密码不正确

@@ -26,15 +26,17 @@ func handlefuncAll() {
 	// 1.过滤器
 	filter_all := common.NewFilter()
 	// 注册拦截器
-	filter_all.RegisterFilterUri("/monibuca", Monibuca_start)          //	启动monibuca
-	filter_all.RegisterFilterUri("/regist", controller.Regist)         //	注册
-	filter_all.RegisterFilterUri("/ffmpeg", controller.Ffmpeg)         //	ffmpeg
-	filter_all.RegisterFilterUri("/ffmpegPuth", controller.FfmpegPuth) //	ffmpeg推流
+	filter_all.RegisterFilterUri("/monibuca", Monibuca_start)              //	启动 monibuca
+	filter_all.RegisterFilterUri("/regist", controller.Regist)             //	注册
+	filter_all.RegisterFilterUri("/ffmpeg", controller.Ffmpeg)             //	ffmpeg
+	filter_all.RegisterFilterUri("/ffmpegPuth", controller.FfmpegPuth)     //	ffmpeg推流
+	filter_all.RegisterFilterUri("/regist_email", controller.Regist_email) //	发送邮箱验证码
 	// 2.启动服务
 	http.HandleFunc("/regist", filter_all.Handle(controller.Check))
 	http.HandleFunc("/monibuca", filter_all.Handle(controller.Check))
 	http.HandleFunc("/ffmpeg", filter_all.Handle(controller.Check))
 	http.HandleFunc("/ffmpegPuth", filter_all.Handle(controller.Check))
+	http.HandleFunc("/regist_email", filter_all.Handle(controller.Check))
 
 	http.HandleFunc("/login", controller.Login)   //	登陆
 	http.HandleFunc("/logout", controller.Logout) //	登出
@@ -45,11 +47,30 @@ func Monibuca_start(w http.ResponseWriter, r *http.Request) {
 	if !controller.Monibuca_flag {
 		controller.Monibuca_flag = true
 		fmt.Println("管理员启动monibuca引擎：")
-		Monibuca() //	启动 monibuca
-	} else {
-		t := template.Must(template.ParseFiles("web/views/pages/user/administrator.html"))
-		t.Execute(w, "/ui/")
+		go Monibuca() //	启动 monibuca
+
 	}
+	t := template.Must(template.ParseFiles("web/views/pages/admin/administrator.html"))
+	t.Execute(w, map[string]string{
+		"ui":  "/ui/",
+		"str": "Had_monibuca",
+	})
+}
+
+func zhuanyi(w http.ResponseWriter, r *http.Request) {
+	//	解析模板之前定义一个自定义函数 safe，保证传输的内容不会被安全化
+	t, _ := template.New("login.html").Funcs(template.FuncMap{
+		"safe": func(str string) template.HTML {
+			return template.HTML(str)
+		},
+	}).ParseFiles("js/login.html")
+
+	str1 := "<a href='http://bilibili.com'>b站</a>"
+	str2 := "<script>alert(123);</script>"
+	t.Execute(w, map[string]string{
+		"str1": str1,
+		"str2": str2,
+	})
 }
 
 func stripPrefix() {

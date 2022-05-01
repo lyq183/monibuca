@@ -18,6 +18,8 @@ require (
 	github.com/Monibuca/plugin-webrtc/v3 v3.0.3
 	github.com/Monibuca/utils/v3 v3.0.6 // indirect
 	github.com/go-sql-driver/mysql v1.6.0
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )
 
 // replace github.com/Monibuca/plugin-ffmpeg => ../plugin-ffmpeg

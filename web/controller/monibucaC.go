@@ -105,5 +105,9 @@ func FfmpegPuth(w http.ResponseWriter, r *http.Request) {
 
 func Monibuce_wu(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("web/views/pages/error/404.html"))
-	t.Execute(w, "monibuca尚未启动！")
+	t.Execute(w, "monibuca尚未启动！请刷新！")
+}
+
+func Monibuca_alive(w http.ResponseWriter, r *http.Request) {
+
 }
