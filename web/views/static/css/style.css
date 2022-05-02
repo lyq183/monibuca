@@ -151,12 +151,13 @@ h1 {
 	font-size: 20px;
 }
 .msg_cont{
+	width:210px;
 	background: none repeat scroll 0 0 #fff6d2;
     border: 1px solid #ffe57d;
     color: #666;
     height: 18px;
     line-height: 18px;
-    padding: 3px 10px 3px 40px;
+    padding: 3px 10px 3px 10px;
     position: relative;
     border: none;
 }
