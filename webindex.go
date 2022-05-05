@@ -11,6 +11,12 @@ import (
 	"github.com/lyq183/monibuca/v3/web/controller"
 )
 
+var (
+	// 过滤器
+	filter_user  = common.NewFilter()
+	filter_admin = common.NewFilter()
+)
+
 func Webindex() {
 	stripPrefix()                          //	加载静态文件
 	handlefuncAll()                        //	注册路由
@@ -23,25 +29,38 @@ func Webindex() {
 }
 
 func handlefuncAll() {
-	// 1.过滤器
-	filter_all := common.NewFilter()
 	// 注册拦截器
-	filter_all.RegisterFilterUri("/monibuca", Monibuca_start)              //	启动 monibuca
-	filter_all.RegisterFilterUri("/regist", controller.Regist)             //	注册
-	filter_all.RegisterFilterUri("/ffmpeg", controller.Ffmpeg)             //	ffmpeg
-	filter_all.RegisterFilterUri("/ffmpegPuth", controller.FfmpegPuth)     //	ffmpeg推流
-	filter_all.RegisterFilterUri("/regist_email", controller.Regist_email) //	发送邮箱验证码
+	filter_user.RegisterFilterUri("/monibuca", Monibuca_start)          //	启动 monibuca
+	filter_user.RegisterFilterUri("/ffmpeg", controller.Ffmpeg)         //	ffmpeg
+	filter_user.RegisterFilterUri("/ffmpegPuth", controller.FfmpegPuth) //	ffmpeg推流
 	// 2.启动服务
-	http.HandleFunc("/regist", filter_all.Handle(controller.Check))
-	http.HandleFunc("/monibuca", filter_all.Handle(controller.Check))
-	http.HandleFunc("/ffmpeg", filter_all.Handle(controller.Check))
-	http.HandleFunc("/ffmpegPuth", filter_all.Handle(controller.Check))
-	http.HandleFunc("/regist_email", filter_all.Handle(controller.Check))
+	http.HandleFunc("/monibuca", filter_user.Handle(controller.Check))
+	http.HandleFunc("/ffmpeg", filter_user.Handle(controller.Check))
+	http.HandleFunc("/ffmpegPuth", filter_user.Handle(controller.Check))
 
 	http.HandleFunc("/login", controller.Login)   //	登陆
 	http.HandleFunc("/logout", controller.Logout) //	登出
 	http.HandleFunc("/monibuca_wu", controller.Monibuce_wu)
+	http.HandleFunc("/admin", controller.AdminLogin) //	管理员登陆
+
+	adminpower("/department_manage", controller.Admin_department_index) //	部门管理主界面
+	//adminpower("/getAlld",controller.GetAlld)	//	获取所有部门信息
+	adminpower("/Admin_portjectManagement", controller.Admin_projectManagement) //	项目管理
+	adminpower("/Admin_userManagement", controller.Admin_userManagement)        //	用户管理
+	adminpower("/regist", controller.Regist)                                    //	注册
+	adminpower("/regist_email", controller.Regist_email)                        //	发送邮箱验证码
 }
+
+//	管理员权限功能注册
+func adminpower(route string, WebHandle func(w http.ResponseWriter, r *http.Request)) {
+	filter_admin.RegisterFilterUri(route, WebHandle)
+	http.HandleFunc(route, filter_admin.Admin_Handle(controller.Admin_Check))
+}
+
+//func userpower(route string, WebHandle func(w http.ResponseWriter, r *http.Request)){
+//	filter_admin.RegisterFilterUri(route, WebHandle)
+//	http.HandleFunc(route,filter_admin.Admin_Handle(controller.Admin_Check))
+//}
 
 func Monibuca_start(w http.ResponseWriter, r *http.Request) {
 	if !controller.Monibuca_flag {

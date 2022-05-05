@@ -126,6 +126,10 @@ div{
 	height:475px;
 	background-color: #39987c;
 }
+.login_banner_admin{
+	height:475px;
+	background-color: #395998;
+}
 
 .login_form{
 	height:310px;
@@ -200,6 +204,14 @@ h1 {
 	width: 360px;
 	height: 40px;
 }
+#sub_btn_admin{
+	background-color: #395998;
+	border: none;
+	color: #fff;
+	width: 360px;
+	height: 40px;
+}
+
 
 #l_content {
 	float: left;

@@ -2,14 +2,13 @@ package config
 
 //	配置信息
 var (
-	//Config = config{"9011","root","12345","library"}
-
-	Ip = ":8081" //登陆监听地址
+	//登陆监听地址
+	Ip = ":8081"
 
 	//	连接数据库
 	DatabaseRoot     = "root"
 	DatabasePassword = "12345"
-	Database         = "library"
+	Database         = "monibuca"
 
 	//发邮箱地址,定义邮箱服务器连接信息，
 	My_email   = "1519560741@qq.com"

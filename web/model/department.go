@@ -1,6 +1,8 @@
 package model
 
-type Deoartment struct {
-	D_id   int
-	D_name string
+type Department struct {
+	D_id          int
+	D_name        string
+	D_manager     string
+	D_description string
 }

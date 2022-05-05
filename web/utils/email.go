@@ -11,6 +11,8 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
+//	邮箱注册功能实现
+
 //	验证输入字符串是否为邮箱格式
 func VerifyEmailFormat(email string) bool {
 	pattern := `\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*` //匹配电子邮箱

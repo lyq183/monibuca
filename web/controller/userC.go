@@ -49,7 +49,6 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 //	Login 处理用户登录
 func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("检测到请求：" + r.RequestURI)
-
 	//获取用户名和密码
 	username := r.PostFormValue("username")
 	password := r.PostFormValue("password")
@@ -60,9 +59,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		//	第一次向服务器发送请求是创建 session，给它一个设置唯一的 ID(可通过UUID生成)
 		str := model.CreateUUID()
 		sess := &model.Session{ //创建一个Session
-			Session_id:  str,
-			Permissions: user.Power,
-			User_id:     user.Uid,
+			Session_id: str,
+			User_id:    user.Uid,
 		}
 		dao.AddSession(sess)   //将Session保存到数据库中
 		cookie := http.Cookie{ //	创建一个 Cookie，
@@ -71,23 +69,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			HttpOnly: true,
 		}
 		http.SetCookie(w, &cookie) //将 cookie发送给浏览器
-		//w.Header().Set("user", cookie.String())
 
 		ui := "/ui/" //	检查 monibuca是否启动
 		if !Monibuca_flag {
 			ui = "/monibuca_wu"
 		}
 
-		if user.Power == 1 { //	管理员登陆
-			t := template.Must(template.ParseFiles("web/views/pages/admin/administrator.html"))
-			t.Execute(w, map[string]string{
-				"ui": ui,
-			})
-
-		} else { //	普通用户登陆
-			t := template.Must(template.ParseFiles("web/views/pages/user/user.html"))
-			t.Execute(w, ui)
-		}
+		t := template.Must(template.ParseFiles("web/views/pages/user/user.html"))
+		t.Execute(w, ui)
 	} else {
 		//用户名或密码不正确
 		t := template.Must(template.ParseFiles("web/views/pages/user/login.html"))

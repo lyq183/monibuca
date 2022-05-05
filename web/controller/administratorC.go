@@ -2,12 +2,45 @@ package controller
 
 import (
 	"fmt"
+	"github.com/lyq183/monibuca/v3/web/model"
 	"net/http"
 	"text/template"
 
 	"github.com/lyq183/monibuca/v3/web/dao"
 	"github.com/lyq183/monibuca/v3/web/utils"
 )
+
+//	管理员登陆
+func AdminLogin(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("检测到管理员登陆请求：" + r.RequestURI)
+	//获取用户名和密码
+	adminname := r.PostFormValue("adminname")
+	password := r.PostFormValue("password")
+
+	//调用userdao中验证用户名和密码的方法
+	admin, _ := dao.CheckAdmin(adminname, password)
+	if admin.Id == 0 {
+		t := template.Must(template.ParseFiles("web/views/pages/admin/admin_login.html"))
+		t.Execute(w, "")
+	} else if admin.Id == 1 { //用户名和密码正确
+		//	登陆成功，更新数据库的 session
+		str := model.CreateUUID()
+		dao.Admin_ChangeSession(str) //将 Session保存到数据库 admin表中
+		cookie := http.Cookie{       //	创建一个 Cookie，
+			Name:     "admin",
+			Value:    str, //	将其 Value值设置为 Seesion的 id
+			HttpOnly: true,
+		}
+		http.SetCookie(w, &cookie) //将 cookie发送给浏览器
+		//	管理员登陆
+		t := template.Must(template.ParseFiles("web/views/pages/admin/administrator.html"))
+		t.Execute(w, "")
+	} else {
+		//用户名或密码不正确
+		t := template.Must(template.ParseFiles("web/views/pages/admin/admin_login.html"))
+		t.Execute(w, "用户名或密码不正确！")
+	}
+}
 
 //	管理员 添加用户
 func Regist(w http.ResponseWriter, r *http.Request) {
@@ -86,4 +119,10 @@ func Regist_email(w http.ResponseWriter, r *http.Request) {
 
 		}
 	}
+}
+
+//	检测登陆与否
+func Admin_Check(w http.ResponseWriter, r *http.Request) {
+	t := template.Must(template.ParseFiles("web/views/pages/error/404.html"))
+	t.Execute(w, "无权限!")
 }
