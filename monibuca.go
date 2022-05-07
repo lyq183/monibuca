@@ -43,8 +43,12 @@ func monibuca_go(configname string) {
 		Run(ctx, filepath.Join(filepath.Dir(os.Args[0]), *addr))
 	}
 }
-func Monibuca() {
-	monibuca_go("config.toml")
+func Monibuca(str string) {
+	if str == "" {
+		monibuca_go("config.toml")
+	} else {
+		monibuca_go(str)
+	}
 }
 
 func waiter(cancel context.CancelFunc) {

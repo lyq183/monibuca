@@ -5,22 +5,12 @@
     <title>部门管理</title>
     <link type="text/css" rel="stylesheet" href="/static/css/style.css" >
     <script src="/static/script/jquery-1.7.2.js"></script>
-    <script>
-        $(function(){
-            $(".deleteBook").click(function(){
-                //获取书名
-                var title = $(this).attr("id");
-                return confirm("确定要删除【"+title+"】这本图书吗？");
-            });
-        });
-    </script>
 </head>
 <body>
 
 <div id="header">
     <span class="wel_word">现有部门</span>
     <div>
-        <a href="/Admin_portjectManagement">项目管理</a>
         <a href="/Admin_userMangement">用户管理</a>
         <a href="/Admin_logout">登出系统</a>
     </div>
@@ -39,7 +29,7 @@
             <td>{{.D_name}}</td>
             <td>{{.D_manager}}</td>
             <td>{{.D_description}}</td>
-            <td><a href="/department?department={{.D_name}}">查看</a></td>
+            <td><a href="/Admin_portjectManagement?department={{.D_name}}" URLEncoding="UTF-8">查看</a></td>
             <td><a id="{{.D_name}}" class="deleteBook" href="/edit_department?department={{.D_name}}">编辑</a></td>
         </tr>
         {{end}}

@@ -2,20 +2,19 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Test添加用户</title>
+	<title>Test添加新用户</title>
 	<link type="text/css" rel="stylesheet" href="../../static/css/style.css" >
 	<style type="text/css">
 		.login_form{
 			height:420px;
 			margin-top: 25px;
 		}
-
 	</style>
 	<script src="../../static/script/jquery-1.7.2.js"></script>
 	<script>
 		$(function(){
 			//给注册按钮绑定单击事件
-			$("#sub_btn").click(function(){
+			$("#sub_btn_admin").click(function(){
 				//获取用户输入的用户名
 				var username = $("#username").val();
 				//设置验证用户名的正则表达式
@@ -47,26 +46,20 @@
 					alert("两次输入的密码不一致！");
 					return false;
 				}
-				//获取用户输入的邮箱
-				var power = $("#power").val();
-				//设置验证邮箱的正则表达式
-				// var emailReg = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-				// var powerReg = /^([0-1]])/;
-				if(!powerReg.test(power)){
-					alert("权限不正确！");
+				var department = $("#department").val();
+				if(department == ""){
+					alert("部门不为空！");
 					return false;
 				}
-
 			});
 		});
 	</script>
 </head>
 <body>
 
-<div class="login_banner">
-
+<div class="login_banner_admin">
 	<div id="l_content">
-		<span class="login_word">欢迎注册</span>
+		<span class="login_word"></span>
 	</div>
 
 	<div id="content">
@@ -74,10 +67,12 @@
 			<div class="login_box">
 				<div class="tit">
 					<h1>注册监控Test用户</h1>
-					<a href="/regist_email">邮箱注册</a>
-					<span class="errorMsg"></span>
 				</div>
-				<br>
+				<div class="msg_cont">
+					<b>
+						<span class="errorMsgRed">{{ . }}</span>
+					</b>
+				</div>
 				<div class="form">
 					<form action="/regist" method="POST">
 						<label>用户名称：</label>
@@ -92,13 +87,12 @@
 						<input class="itxt" type="password" placeholder="确认密码" autocomplete="off" tabindex="1" name="repwd" id="repwd" />
 						<br />
 						<br />
-						<label>用户权限：</label>
-						<input type="radio" name="power" value="A" /> 管理
-						<input type="radio" name="power" value="N" /> 普通<br />
+						<label>所属部门: </label>
+						<input class="itxt" type="text" placeholder="所属部门" autocomplete="off" tabindex="1" name="department" id="department" />
 						<br />
 						<br />
 						<br />
-						<input type="submit" value="注册" id="sub_btn" />
+						<input type="submit" value="注册" id="sub_btn_admin" />
 					</form>
 				</div>
 
@@ -106,6 +100,6 @@
 		</div>
 	</div>
 </div>
-
 </body>
+
 </html>

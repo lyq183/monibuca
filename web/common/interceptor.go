@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/lyq183/monibuca/v3/web/controller"
 	"github.com/lyq183/monibuca/v3/web/dao"
 	"github.com/lyq183/monibuca/v3/web/model"
 )
@@ -44,8 +43,8 @@ func (f *Filter) Handle(webHandle WebHandle) WebHandle {
 			// 执行拦截业务逻辑
 			webHandle(w, r)
 		} else if sess.Permissions == 0 {
-			controller.Not404(w, r)
-		} else { //	有管理员权限，允许访问
+			//	controller.Not404(w, r)
+			//} else { //	有管理员权限，允许访问
 			url := strings.Split(r.RequestURI, "?")
 			for path, handle := range f.filterMap {
 				if path == url[0] {
@@ -63,7 +62,6 @@ func IsLogin(r *http.Request) (bool, *model.Session) {
 	fmt.Println("!!!!", cookie)
 	if cookie != nil { //	存在用户已经登陆
 		cookieValue := cookie.Value //获取Cookie的value
-		fmt.Println(cookieValue)
 		//根据cookieValue 去数据库中查询与之对应的 Session
 		if sess, _ := dao.GetSession(cookieValue); sess != nil {
 			fmt.Println("用户已经登陆。")

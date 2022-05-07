@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"github.com/lyq183/monibuca/v3/configs"
 	"net/http"
 	"text/template"
 
@@ -70,16 +71,65 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		}
 		http.SetCookie(w, &cookie) //将 cookie发送给浏览器
 
-		ui := "/ui/" //	检查 monibuca是否启动
-		if !Monibuca_flag {
-			ui = "/monibuca_wu"
+		//	根据用户名，查询名下的项目
+		Pros, _ := dao.GetProjects_Byusername(user.Uid)
+
+		str_add := ""
+		for _, v := range Pros {
+			user_name, _ := dao.CheackUserId(v.P_u_id)
+			ss := "{" +
+				"d_name:'" + v.P_name + "'," +
+				"manager: '" + user_name.Username + "'," +
+				"config:'" + v.P_configName + "'," +
+				"},"
+			str_add += ss
 		}
+		fmt.Println(str_add)
+
+		str_user := "<script>	" +
+			"var Main = {" +
+			"data() { " +
+			"return {" +
+			"tableData: [" +
+			str_add +
+			"]," +
+			"search: ''" +
+			"}" +
+			"}," +
+			"\nmethods: {" +
+			"\nEdit_config(index, row) {" +
+			"\nwindow.location.href=\"Check_config?config=\"" + "+row.config" +
+			"}," +
+			"\nStartMonibuca(index, row) {" +
+			"\nwindow.location.href=\"If_monibuca?config=\"" + "+row.config" +
+			"}" +
+			"}," +
+			"}" +
+
+			"\nvar Ctor = Vue.extend(Main)" +
+			"\nnew Ctor().$mount('#app')" +
+			"</script>"
 
 		t := template.Must(template.ParseFiles("web/views/pages/user/user.html"))
-		t.Execute(w, ui)
+		t.Execute(w, str_user)
 	} else {
 		//用户名或密码不正确
 		t := template.Must(template.ParseFiles("web/views/pages/user/login.html"))
 		t.Execute(w, "用户名或密码不正确！")
+	}
+}
+
+func If_monibuca(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.RequestURI)
+	config := r.PostFormValue("config")
+	_, ok := configs.Monibucas[config]
+	if ok {
+		//t := template.Must(template.ParseFiles("/login"))
+		//t.Execute(w, "")
+		w.Header().Set("Location", "https://localhost:8082/ui/")
+		w.WriteHeader(301)
+	} else {
+		t := template.Must(template.ParseFiles("web/views/pages/error/404.html"))
+		t.Execute(w, "monibuca尚未启动！")
 	}
 }

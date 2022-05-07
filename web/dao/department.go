@@ -25,7 +25,7 @@ func GetPaged(pageNo string) (*model.Page, error) {
 		totalPageNo = totalRecord/pageSize + 1
 	}
 
-	//获取当前页中的图书
+	//获取当前页中的
 	sqlStr2 := "SELECT d_id,d_name,d_manager_id,d_description FROM department LIMIT ?,?"
 	rows, err := utils.Db.Query(sqlStr2, (iPageNo-1)*pageSize, pageSize)
 	if err != nil {
@@ -36,7 +36,6 @@ func GetPaged(pageNo string) (*model.Page, error) {
 	for rows.Next() {
 		department := &model.Department{}
 		rows.Scan(&department.D_id, &department.D_name, &department.D_manager, &department.D_description)
-		//将book添加到books中
 		departments = append(departments, department)
 	}
 	//创建page
@@ -48,4 +47,19 @@ func GetPaged(pageNo string) (*model.Page, error) {
 		TotalRecord: totalRecord,
 	}
 	return page, nil
+}
+
+func Get_D_byname(d_name string) int {
+	sql := "SELECT d_id,d_name,d_manager_id,d_description FROM department where d_name = ?"
+	rows := utils.Db.QueryRow(sql, d_name)
+	department := &model.Department{}
+	rows.Scan(&department.D_id, &department.D_name, &department.D_manager, &department.D_description)
+	return department.D_id
+}
+func Get_D_byid(d_id int) string {
+	sql := "SELECT d_id,d_name,d_manager_id,d_description FROM department where d_id = ?"
+	rows := utils.Db.QueryRow(sql, d_id)
+	department := &model.Department{}
+	rows.Scan(&department.D_id, &department.D_name, &department.D_manager, &department.D_description)
+	return department.D_name
 }

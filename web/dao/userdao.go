@@ -17,9 +17,17 @@ func CheckUserNameAndPassword(username string, password string) (*model.User, er
 
 //CheckUserName 根据用户名和密码从数据库中查询一条记录
 func CheckUserName(username string) (*model.User, error) {
-	sqlStr := "select id,username,password,power from users where username = ?"
-	//执行
+	sqlStr := "select id,username,password,department_id from users where username = ?"
 	row := utils.Db.QueryRow(sqlStr, username)
+	user := &model.User{}
+	row.Scan(&user.Uid, &user.Username, &user.Password, &user.Department_id)
+	return user, nil
+}
+
+//	根据 id 查 name
+func CheackUserId(uid int) (*model.User, error) {
+	sqlStr := "SELECT id,username,PASSWORD,department_id FROM users WHERE id = ?"
+	row := utils.Db.QueryRow(sqlStr, uid)
 	user := &model.User{}
 	row.Scan(&user.Uid, &user.Username, &user.Password, &user.Department_id)
 	return user, nil
@@ -35,4 +43,20 @@ func AddUser(username string, password string, department_id int) error {
 		return err
 	}
 	return nil
+}
+
+//	查询所有用户信息
+func GetUsers() ([]*model.User, error) {
+	sql := "SELECT id,username,PASSWORD,department_id FROM users"
+	rows, err := utils.Db.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+	var pros []*model.User
+	for rows.Next() {
+		u := &model.User{}
+		rows.Scan(&u.Uid, &u.Username, &u.Password, &u.Department_id)
+		pros = append(pros, u)
+	}
+	return pros, nil
 }

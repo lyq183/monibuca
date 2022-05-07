@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>监控管理用户</title>
+    <link type="text/css" rel="stylesheet" href="../../static/css/style.css" >
+    <style type="text/css">
+        h1 {
+            text-align: center;
+            margin-top: 200px;
+        }
+
+        h1 a {
+            color:red;
+        }
+    </style>
+</head>
+
+<body>
+<div id="header">
+    <div>
+        <span><span class="um_span">你为普通用户:</span></span>
+        <a href="/logout">退出系统</a>
+    </div>
+</div>
+
+<div id="main">
+    <h1>欢迎回来 <a href={{ . }} target="view_window">打开monibuca主界面</a></h1>
+    <h1>
+        <a href="/ffmpeg">ffmpeg推流</a>
+        <a href="/gb28181" target="view_window">关于GB28181</a>
+    </h1>
+
+</div>
+
+<div id="bottom">
+			<span>
+				监控Test用户主界面
+			</span>
+</div>
+
+</body>
+</html>

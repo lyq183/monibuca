@@ -21,65 +21,39 @@
 
   <script>
     $(function(){
-      //给注册按钮绑定单击事件
-      $("#sub_btn").click(function(){
-        //获取用户输入的用户名
+      $("#sub_btn_admin").click(function(){
         var username = $("#username").val();
-        //设置验证用户名的正则表达式
         var usernameReg = /^[a-zA-Z0-9_-]{3,16}$/;
-        //验证是否符合规则
         var flag = usernameReg.test(username);
         if(!flag){
           alert("请输入3-16位的字母、数字、下划线或减号的用户名！");
           return false;
         }
-        //获取用户输入的密码
         var password = $("#password").val();
-        //设置验证密码的正则表达式
         var passwordReg = /^[a-zA-Z0-9_-]{6,18}$/;
         if(!passwordReg.test(password)){
           alert("请输入6-18位的字母、数字、下划线或减号的密码！")
           return false;
         }
-        //获取用户输入的确认密码
         var repwd = $("#repwd").val();
         if(repwd == ""){
           alert("确认密码不能为空！");
           return false;
         }
-        //获取用户输入的权限
-        var power = $("#power").val();
-        if(!powerReg.test(power)){
-          alert("权限不正确！");
-          return false;
-        }
-
+        // var emailReg =   /^[a-zA-Z0-9.! #$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+[a-z]{2,}$/;
+        // if(!emailReg.test(email)){
+        //   alert("邮箱格式不正确！");
+        //   return false;
+        // }
       });
     });
   </script>
-
-<!--  <script>-->
-<!--    $(function(){-->
-<!--      //给注册按钮绑定单击事件-->
-<!--      $("#verify").click(function(){-->
-<!--        //获取用户输入的邮箱-->
-<!--        var m = $("#email").val();-->
-<!--        //设置验证邮箱的正则表达式-->
-<!--        var emailReg = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;-->
-<!--        if(!emailReg.test(email)){-->
-<!--          alert("邮箱格式不正确！");-->
-<!--          return false;-->
-<!--        }-->
-<!--      });-->
-<!--    });-->
-<!--  </script>-->
 </head>
 
 <body>
 
-<div class="login_banner">
+<div class="login_banner_admin">
   <div id="l_content">
-    <span class="login_word">欢迎注册</span>
   </div>
 
   <div id="content">
@@ -90,30 +64,29 @@
         </div>
         <div class="msg_cont">
         <b>
-          <span class="errorMsgRed">{{ . }}</span>
+          <span class="errorMsgRed">{{ .err }}</span>
         </b>
       </div>
         <br>
         <div class="form">
           <form action="/regist_email" method="POST">
             <label>邮&nbsp;&nbsp;&nbsp;箱：</label>
-            <input class="itxt" type="text" placeholder="请输入邮箱" autocomplete="off" tabindex="1" name="email" id="email" />
+            <input class="itxt" type="text" placeholder="请输入邮箱" autocomplete="off" tabindex="1" name="email" id="email" value="{{.email}}" />
             <br />
             <br />
             <label>密&nbsp;&nbsp;&nbsp;码：</label>
-            <input class="itxt" type="password" placeholder="确认密码" autocomplete="off" tabindex="1" name="password" id="password" />
+            <input class="itxt" type="password" placeholder="确认密码" autocomplete="off" tabindex="1" name="password" id="password" value="{{.password}}" />
             <br />
             <br />
-            <label>用户权限：</label>
-            <input type="radio" name="power" value="A" /> 管理
-            &nbsp;&nbsp;&nbsp;
-            <input type="radio" name="power" value="N" /> 普通
+            <label>所属部门: </label>
+            <input class="itxt" type="text" placeholder="所属部门" autocomplete="off" tabindex="1" name="department" id="department" value="{{.department}}"/>
             <br />
             <br />
             <input class="itxt" type="vcode" placeholder="请输入验证码" autocomplete="off" tabindex="1" name="vcode" id="vcode" >
             <el-button type="primary" native-type="submit" id="verify">获取验证码</el-button>
             <br />
-            <input type="submit" value="注册" id="sub_btn" />
+            <br />
+            <input type="submit" value="注册" id="sub_btn_admin" />
           </form>
 
         </div>

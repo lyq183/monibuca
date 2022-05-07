@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/lyq183/monibuca/v3/configs"
 	"github.com/lyq183/monibuca/v3/web/common"
 	"html/template"
 	"log"
@@ -30,25 +31,30 @@ func Webindex() {
 
 func handlefuncAll() {
 	// 注册拦截器
-	filter_user.RegisterFilterUri("/monibuca", Monibuca_start)          //	启动 monibuca
-	filter_user.RegisterFilterUri("/ffmpeg", controller.Ffmpeg)         //	ffmpeg
-	filter_user.RegisterFilterUri("/ffmpegPuth", controller.FfmpegPuth) //	ffmpeg推流
+	//filter_user.RegisterFilterUri("/monibuca", Monibuca_run)          //	启动 monibuca
+	filter_user.RegisterFilterUri("/ffmpeg", controller.Ffmpeg)           //	ffmpeg
+	filter_user.RegisterFilterUri("/ffmpegPuth", controller.FfmpegPuth)   //	ffmpeg推流
+	filter_user.RegisterFilterUri("/If_monibuca", controller.If_monibuca) //	检查monibuca是否启动
 	// 2.启动服务
-	http.HandleFunc("/monibuca", filter_user.Handle(controller.Check))
+	//http.HandleFunc("/monibuca", filter_user.Handle(controller.Check))
 	http.HandleFunc("/ffmpeg", filter_user.Handle(controller.Check))
 	http.HandleFunc("/ffmpegPuth", filter_user.Handle(controller.Check))
+	http.HandleFunc("/If_monibuca", filter_user.Handle(controller.Check))
 
-	http.HandleFunc("/login", controller.Login)   //	登陆
-	http.HandleFunc("/logout", controller.Logout) //	登出
-	http.HandleFunc("/monibuca_wu", controller.Monibuce_wu)
-	http.HandleFunc("/admin", controller.AdminLogin) //	管理员登陆
+	http.HandleFunc("/login", controller.Login)             //	登陆
+	http.HandleFunc("/logout", controller.Logout)           //	登出
+	http.HandleFunc("/monibuca_wu", controller.Monibuce_wu) //	monibuca未启动
+	http.HandleFunc("/admin", controller.AdminLogin)        //	管理员登陆
 
 	adminpower("/department_manage", controller.Admin_department_index) //	部门管理主界面
 	//adminpower("/getAlld",controller.GetAlld)	//	获取所有部门信息
+	adminpower("/edit_department", controller.Edit_department)                  //	编辑部门信息
 	adminpower("/Admin_portjectManagement", controller.Admin_projectManagement) //	项目管理
+	adminpower("/Edit_config", controller.Edit_config)                          //	修改项目配置文件
 	adminpower("/Admin_userManagement", controller.Admin_userManagement)        //	用户管理
 	adminpower("/regist", controller.Regist)                                    //	注册
 	adminpower("/regist_email", controller.Regist_email)                        //	发送邮箱验证码
+	adminpower("/monibuca", Monibuca_run)                                       //	启动某个 monibuca
 }
 
 //	管理员权限功能注册
@@ -66,14 +72,26 @@ func Monibuca_start(w http.ResponseWriter, r *http.Request) {
 	if !controller.Monibuca_flag {
 		controller.Monibuca_flag = true
 		fmt.Println("管理员启动monibuca引擎：")
-		go Monibuca() //	启动 monibuca
-
+		go Monibuca("") //	启动 monibuca
 	}
 	t := template.Must(template.ParseFiles("web/views/pages/admin/administrator.html"))
 	t.Execute(w, map[string]string{
 		"ui":  "/ui/",
 		"str": "Had_monibuca",
 	})
+}
+func Monibuca_run(w http.ResponseWriter, r *http.Request) {
+	config := r.PostFormValue("config")
+	_, ok := configs.Monibucas[config]
+	if !ok {
+		configs.Monibucas[config] = true //	记录该monibuca已经启动
+		go Monibuca(config)              //	启动 monibuca
+		t := template.Must(template.ParseFiles("web/views/pages/admin/administrator.html"))
+		t.Execute(w, map[string]string{
+			"ui":  "/ui/",
+			"str": "Had_monibuca",
+		})
+	}
 }
 
 func zhuanyi(w http.ResponseWriter, r *http.Request) {
