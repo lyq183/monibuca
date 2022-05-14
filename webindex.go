@@ -10,7 +10,6 @@ import (
 	//"html/template"
 	"text/template"
 
-	"github.com/lyq183/monibuca/v3/web/config"
 	"github.com/lyq183/monibuca/v3/web/controller"
 )
 
@@ -25,8 +24,8 @@ func Webindex() {
 	handlefuncAll()                        //	注册路由
 	http.HandleFunc("/", controller.Index) //先登陆
 
-	fmt.Println("登陆用户：http://localhost" + config.Ip)
-	if err := http.ListenAndServe(config.Ip, nil); err != nil {
+	fmt.Println("登陆用户：http://localhost" + configs.Ip)
+	if err := http.ListenAndServe(configs.Ip, nil); err != nil {
 		log.Fatal("错误！！！ListenAndServe err:", err)
 	}
 }

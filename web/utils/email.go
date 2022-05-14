@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"github.com/lyq183/monibuca/v3/web/config"
+	"github.com/lyq183/monibuca/v3/configs"
 	"math/rand"
 	"regexp"
 	"strconv"
@@ -23,11 +23,11 @@ func VerifyEmailFormat(email string) bool {
 func SendMail(mailTo string, verification_code string) error {
 	//定义邮箱服务器连接信息，如果是阿里邮箱 pass填密码，qq邮箱填授权码
 	mailConn := map[string]string{
-		"name": config.Email_name,
-		"user": config.My_email,
-		"pass": config.Email_pass,
-		"host": config.Smtp_host,
-		"port": config.Smtp_port,
+		"name": configs.Email_name,
+		"user": configs.My_email,
+		"pass": configs.Email_pass,
+		"host": configs.Smtp_host,
+		"port": configs.Smtp_port,
 	}
 	port, _ := strconv.Atoi(mailConn["port"]) //转换端口类型为int
 
