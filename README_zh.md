@@ -11,10 +11,11 @@ git clone -b v9 https://github.com/lyq183/monibuca
 ## 连接数据库和邮箱
 在目录configs下的Web_config.go中配置
 
+## 启动
+执行main.go 
+浏览器打开 监听端口 可以登陆用户
+http://localhost:端口/admin：打开管理员后台
 
-2. 执行main.go
-3. 浏览器打开8081端口可以登陆用户
-4. http://localhost:8081/admin：打开管理员后台
 
 5. ffmpeg或者OBS推流到1935端口
 6. 后台界面上提供直播预览、录制flv、rtsp拉流转发、日志跟踪等功能
