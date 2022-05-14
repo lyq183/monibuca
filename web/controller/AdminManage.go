@@ -22,6 +22,23 @@ func Admin_department_index(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, page)
 }
 
+func Add_department(w http.ResponseWriter, r *http.Request) { //	添加部门信息
+	dname := r.PostFormValue("dname")
+	uname := r.PostFormValue("uname")
+	ss := r.PostFormValue("ss")
+	dao.Add_department(dname, uname, ss)
+
+	//获取页码
+	pageNo := r.FormValue("pageNo")
+	if pageNo == "" {
+		pageNo = "1"
+	}
+	page, _ := dao.GetPaged(pageNo)
+
+	t := template.Must(template.ParseFiles("web/views/pages/department/department_index.html"))
+	t.Execute(w, page)
+}
+
 func Edit_department(w http.ResponseWriter, r *http.Request) { //	修改部门信息
 
 }

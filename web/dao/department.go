@@ -63,3 +63,11 @@ func Get_D_byid(d_id int) string { //	根据 id 查 部门名称
 	rows.Scan(&department.D_id, &department.D_name, &department.D_manager, &department.D_description)
 	return department.D_name
 }
+
+func Add_department(dname string, uname string, ss string) {
+	user, _ := CheckUserName(uname)
+	if user.Uid != 6 {
+		sql := "INSERT INTO department(d_name,d_manager_id,d_description) VALUES (?,?,?)"
+		utils.Db.Exec(sql, dname, user.Uid, ss)
+	}
+}

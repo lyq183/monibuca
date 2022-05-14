@@ -42,6 +42,7 @@ func handlefuncAll() {
 
 	http.HandleFunc("/admin", controller.AdminLogin)                            //	管理员登陆
 	adminpower("/department_manage", controller.Admin_department_index)         //	部门管理主界面
+	adminpower("/add_department", controller.Add_department)                    //	添加新部门
 	adminpower("/edit_department", controller.Edit_department)                  //	编辑部门信息
 	adminpower("/Admin_portjectManagement", controller.Admin_projectManagement) //	项目管理
 	adminpower("/Edit_config", controller.Edit_config)                          //	修改项目配置文件

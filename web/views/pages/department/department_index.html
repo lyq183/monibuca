@@ -4,15 +4,49 @@
     <meta charset="UTF-8">
     <title>部门管理</title>
     <link type="text/css" rel="stylesheet" href="/static/css/style.css" >
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <script src="/static/script/jquery-1.7.2.js"></script>
 </head>
-<body>
 
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="//unpkg.com/element-ui@2.15.7/lib/index.js"></script>
+
+<body>
 <div id="header">
     <span class="wel_word">现有部门</span>
     <div>
-        <a href="/Admin_userMangement">用户管理</a>
         <a href="/Admin_logout">登出系统</a>
+
+    <el-button type="text" @click="dialog = true">添加新部门</el-button>
+
+    <el-drawer
+            title="添加新部门："
+            :before-close="handleClose"
+            :visible.sync="dialog"
+            direction="ltr"
+            custom-class="demo-drawer"
+            ref="drawer"
+    >
+        <div class="form">
+            <form action="/add_department" method="POST">
+                <label>部门名称：</label>
+                <input class="itxt" type="text" placeholder="部门名称" autocomplete="off" tabindex="1" name="dname" id="dname"/>
+                <br />
+                <br />
+                <label>负责人名称：</label>
+                <input class="itxt" type="text" placeholder="负责人名称" autocomplete="off" tabindex="1" name="uname" id="uname"/>
+                <br />
+                <br />
+                <label>部门描述：</label>
+                <input class="itxt" type="text" placeholder="部门描述" autocomplete="off" tabindex="1" name="ss" id="ss"/>
+                <br />
+                <br />
+                <br />
+                <input type="submit" value="添加" id="sub_btn" @click="ok"/>
+            </form>
+        </div>
+    </el-drawer>
     </div>
 </div>
 
@@ -40,7 +74,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td><a href="/Admin_addNewDepartment">添加新部门</a></td>
+            <td></td>
         </tr>
     </table>
     <div id="page_nav">
@@ -73,4 +107,27 @@
 		</span>
 </div>
 </body>
+
+<script>
+    var Main =  {
+        data() {
+            return {
+                table: false,
+                dialog: false,
+                loading: false,
+                formLabelWidth: '80px',
+                timer: null,
+            };
+        },
+        methods: {
+            ok() {
+                alert("已提交部门添加！");
+            }
+        },
+    }
+
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#header')
+</script>
+
 </html>
