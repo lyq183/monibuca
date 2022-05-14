@@ -16,9 +16,10 @@
 <body>
 <div id="app">
     <div>
-        <el-link href="/monibuca_manage" type="primary">项目管理</el-link>
-        <el-link href="/department_manage" type="success">用户管理</el-link>
-        <el-link href="/toml_change" type="warning">修改配置文件</el-link>
+<!--        <el-link href="/monibuca_manage" type="primary">项目管理</el-link>-->
+        <el-button type="text" @click="open">修改密码</el-button>
+<!--        <el-link href="/user_PasswordChange" type="success" @click="open">修改密码</el-link>-->
+        <el-link href="/logout" type="warning">登出系统</el-link>
     </div>
     <br>
     <br>
@@ -51,11 +52,11 @@
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
-                            @click="Check_config(scope.$index, scope.row)">查看配置文件</el-button>
+                            @click="StartMonibuca(scope.$index, scope.row)">启动</el-button>
                     <el-button
                             size="mini"
                             type="danger"
-                            @click="StartMonibuca(scope.$index, scope.row)">打开页面</el-button>
+                            @click="RunMonibuca(scope.$index, scope.row)">打开页面</el-button>
                 </template>
             </el-table-column>
         </el-table>

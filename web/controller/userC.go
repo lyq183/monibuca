@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/lyq183/monibuca/v3/configs"
 	"net/http"
+	"strings"
 	"text/template"
 
 	"github.com/lyq183/monibuca/v3/web/dao"
@@ -97,11 +98,40 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			"}" +
 			"}," +
 			"\nmethods: {" +
-			"\nEdit_config(index, row) {" +
-			"\nwindow.location.href=\"Check_config?config=\"" + "+row.config" +
-			"}," +
 			"\nStartMonibuca(index, row) {" +
+			"\nwindow.location.href=\"monibuca?config=\"" + "+row.config" +
+			"}," +
+			"\nRunMonibuca(index, row) {" +
 			"\nwindow.location.href=\"If_monibuca?config=\"" + "+row.config" +
+			"\n}," +
+			"\nopen() {" +
+			"\nthis.$prompt('请输入新密码', '提示', {" +
+			"\nconfirmButtonText: '确定'," +
+			"\ncancelButtonText: '取消'," +
+			"\ninputPattern: /^[\\s\\S]*.*[^\\s][\\s\\S]*$/," +
+			"\ninputErrorMessage: '密码不能为空！'" +
+			"\n}).then(({ value }) => {" +
+			"\nlet pa = JSON.stringify({ " +
+			"\n new_pword:value" +
+			"\n});" +
+			"\nlet jsonHeaders = new Headers({" +
+			"\n'Content-Type': 'application/json'" +
+			"\n});" +
+			"\nfetch('/user_PasswordChange',{" +
+			"\nmethod: 'POST'," +
+			"\nbody:pa," +
+			"\nheaders:jsonHeaders" +
+			"\n});" +
+			"this.$message({" +
+			"type: 'success'," +
+			"message: '修改成功！'" +
+			"});" +
+			"}).catch(() => {" +
+			"this.$message({" +
+			"type: 'info'," +
+			"message: '取消修改密码'" +
+			"});" +
+			"});" +
 			"}" +
 			"}," +
 			"}" +
@@ -119,17 +149,29 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//	判断 Monibuca 启动与否
 func If_monibuca(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.RequestURI)
 	config := r.PostFormValue("config")
 	_, ok := configs.Monibucas[config]
 	if ok {
-		//t := template.Must(template.ParseFiles("/login"))
-		//t.Execute(w, "")
 		w.Header().Set("Location", "https://localhost:8082/ui/")
 		w.WriteHeader(301)
 	} else {
 		t := template.Must(template.ParseFiles("web/views/pages/error/404.html"))
 		t.Execute(w, "monibuca尚未启动！")
 	}
+}
+
+//用户修改密码
+func Password_Change(w http.ResponseWriter, r *http.Request) {
+	cookie, _ := r.Cookie("user") //根据Cookie的name获取Cookie
+	sess, _ := dao.GetSession(cookie.Value)
+
+	body := make([]byte, r.ContentLength) // 新建一个字节切片，长度与请求报文的内容长度相同
+	r.Body.Read(body)                     // 读取 r 的请求主体，并将具体内容读入 body 中
+	str := strings.Split(string(body), "\"")
+	new_password := str[3]
+
+	dao.Password_Change(sess.User_id, new_password)
 }

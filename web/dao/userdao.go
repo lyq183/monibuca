@@ -45,6 +45,15 @@ func AddUser(username string, password string, department_id int) error {
 	return nil
 }
 
+//	修改密码
+func Password_Change(uid int, new_pw string) error {
+	sql := "UPDATE users SET PASSWORD = ? WHERE id = ?"
+	if _, err := utils.Db.Exec(sql, new_pw, uid); err != nil {
+		return err
+	}
+	return nil
+}
+
 //	查询所有用户信息
 func GetUsers() ([]*model.User, error) {
 	sql := "SELECT id,username,PASSWORD,department_id FROM users"

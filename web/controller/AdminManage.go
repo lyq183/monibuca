@@ -35,13 +35,14 @@ func Admin_projectManagement(w http.ResponseWriter, r *http.Request) {
 	url, _ := url.QueryUnescape(r.RequestURI)
 	pp := strings.Split(url, "=")
 	d_id := dao.Get_D_byname(pp[1])
+	d_name := dao.Get_D_byid(d_id)
 	Pros, _ := dao.Getprojects(d_id) //	查询出所有属于该部门的项目
 
 	str_add := ""
 	for _, v := range Pros {
 		user_name, _ := dao.CheackUserId(v.P_u_id)
 		ss := "{" +
-			"d_name:'" + v.P_name + "'," +
+			"p_name:'" + v.P_name + "'," +
 			"manager: '" + user_name.Username + "'," +
 			"config:'" + v.P_configName + "'," +
 			"},"
@@ -60,8 +61,8 @@ func Admin_projectManagement(w http.ResponseWriter, r *http.Request) {
 		"}" +
 		"}," +
 		"\nmethods: {" +
-		"\nEdit_config(index, row) {" +
-		"\nwindow.location.href=\"Edit_config?d_name=\"" + "+row.d_name" +
+		"\nEdit_project(index, row) {" +
+		"\nwindow.location.href=\"Edit_project?d_name=\"" + "+row.d_name" +
 		"}," +
 		"\nStartMonibuca(index, row) {" +
 		"\nwindow.location.href=\"monibuca?config=\"" + "+row.config" +
@@ -74,7 +75,10 @@ func Admin_projectManagement(w http.ResponseWriter, r *http.Request) {
 		"</script>"
 
 	t := template.Must(template.ParseFiles("web/views/pages/department/project_index.html"))
-	t.Execute(w, str)
+	t.Execute(w, map[string]string{
+		"str":    str,
+		"d_name": d_name,
+	})
 }
 
 //	查询所以用户信息

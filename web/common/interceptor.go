@@ -44,7 +44,7 @@ func (f *Filter) Handle(webHandle WebHandle) WebHandle {
 			webHandle(w, r)
 		} else if sess.Permissions == 0 {
 			//	controller.Not404(w, r)
-			//} else { //	有管理员权限，允许访问
+			//} else {
 			url := strings.Split(r.RequestURI, "?")
 			for path, handle := range f.filterMap {
 				if path == url[0] {
@@ -76,7 +76,6 @@ func (f *Filter) Admin_Handle(webHandle WebHandle) WebHandle {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("检测到管理权限请求：" + r.RequestURI)
 		Flag := Admin_IsLogin(r)
-
 		if !Flag { //	非管理员
 			fmt.Println("!!执行拦截:" + r.RequestURI)
 			webHandle(w, r) // 执行拦截业务逻辑

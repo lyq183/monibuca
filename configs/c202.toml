@@ -13,8 +13,8 @@ SampleRate = 1
 [RTMP]
 ListenAddr = ":1935"
 [GateWay]
-ListenAddr = ":8081"
-ListenAddrTLS = ":8082"
+ListenAddr = ":9081"
+ListenAddrTLS = ":9082"
 CertFile = "server.pem"
 KeyFile = "server.key"
 [Jessica]
@@ -29,7 +29,7 @@ Path = "logs"
 Size = 0
 Days = 1
 # 按照go layout格式化，默认按照小时
-Formatter = "2006-01-02T15"
+Formatter = "2022-02-29T16"
 # [FFMPEG]
 [HLS]
 # 是否开启写磁盘，开启后侦测到发布流就会开始写TS文件
@@ -56,7 +56,7 @@ Path  = "resource"
 [Record]
 Path = "resource"
 # 自动录制功能
-AutoRecord  = false
+AutoRecord  = true
 [RTSP]
 # 端口接收推流
 ListenAddr = ":554"
@@ -85,8 +85,7 @@ Expires = 3600
 # TCP = true
 # TCP端口数量，超过一个的话将会每个设备轮流使用，从MediaPort往下递增
 # TCPMediaPortNum = 1
-ListenAddr = "192.168.1.120:5060"
-# ListenAddr = "192.168.43.136:5065"
+ListenAddr = "192.168.43.136:5065"
 # 自动停止发布，当订阅者数量将为0时，延迟N秒自动断开,-1代表不断开
 AutoCloseAfter = -1
 # 自动拉流，如果开启，则拿到设备注册信息后，就从设备拉流

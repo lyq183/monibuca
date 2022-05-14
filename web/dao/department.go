@@ -49,14 +49,14 @@ func GetPaged(pageNo string) (*model.Page, error) {
 	return page, nil
 }
 
-func Get_D_byname(d_name string) int {
+func Get_D_byname(d_name string) int { //	根据 部门名称 查 id
 	sql := "SELECT d_id,d_name,d_manager_id,d_description FROM department where d_name = ?"
 	rows := utils.Db.QueryRow(sql, d_name)
 	department := &model.Department{}
 	rows.Scan(&department.D_id, &department.D_name, &department.D_manager, &department.D_description)
 	return department.D_id
 }
-func Get_D_byid(d_id int) string {
+func Get_D_byid(d_id int) string { //	根据 id 查 部门名称
 	sql := "SELECT d_id,d_name,d_manager_id,d_description FROM department where d_id = ?"
 	rows := utils.Db.QueryRow(sql, d_id)
 	department := &model.Department{}

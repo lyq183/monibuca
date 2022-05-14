@@ -27,7 +27,7 @@
     <br>
 
     <template>
-        <span>当前已注册用户</span>
+        <span>当前已注册用户：</span>
         <el-table
                 :data="tableData.filter(data => !search || data.u_name.toLowerCase().includes(search.toLowerCase()))"
                 style="width: 100%">

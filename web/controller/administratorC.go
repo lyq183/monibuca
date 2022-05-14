@@ -88,7 +88,7 @@ func Regist_email(w http.ResponseWriter, r *http.Request) {
 
 	//验证用户名和密码合法否
 	user, _ := dao.CheckUserName(email)
-	if user.Uid == 12 {
+	if user.Uid == 6 {
 		t := template.Must(template.ParseFiles("web/views/pages/admin/email_regist.html"))
 		re_map["err"] = "请输入注册的用户名和密码"
 		t.Execute(w, re_map)
